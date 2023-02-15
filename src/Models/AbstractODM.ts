@@ -1,4 +1,4 @@
-import { Schema, Model, models, model } from 'mongoose';
+import { Schema, Model, models, model, UpdateQuery } from 'mongoose';
 
 abstract class AbstractODM<T> {
   protected model: Model<T>;
@@ -13,6 +13,10 @@ abstract class AbstractODM<T> {
 
   public async create(object: T): Promise<T> {
     return this.model.create({ ...object });
+  }
+
+  public async update(id: string, obj: Partial<T>): Promise<T | null> {
+    return this.model.findByIdAndUpdate({ _id: id }, { ...obj } as UpdateQuery<T>, { new: true });
   }
 }
 

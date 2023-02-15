@@ -21,6 +21,11 @@ class CarService {
     const [getCarById] = search.map((car) => new Car(car)).filter((car) => id === car.id); 
     return getCarById;
   }
+
+  public async updateCar(id: string, body: ICar) {
+    const updatedInfo = await this.model.update(id, body);
+    if (updatedInfo !== null) return new Car(updatedInfo);
+  }
 }
 
 export default CarService;
