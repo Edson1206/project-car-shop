@@ -26,6 +26,10 @@ class CarService {
     const updatedInfo = await this.model.update(id, body);
     if (updatedInfo !== null) return new Car(updatedInfo);
   }
+
+  public async deleteById(id: string) {
+    await this.model.delete(id);
+  }
 }
 
 export default CarService;

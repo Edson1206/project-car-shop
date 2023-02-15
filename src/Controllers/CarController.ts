@@ -3,6 +3,9 @@ import { isValidObjectId } from 'mongoose';
 import ICar from '../Interfaces/ICar';
 import CarService from '../Services/CarService';
 
+const mongoMessage = 'Invalid mongo id';
+const carMessage = 'Car not found';
+
 class CarController {
   private req: Request;
   private res: Response;
@@ -47,10 +50,10 @@ class CarController {
   public async getById() {
     try {
       const { id } = this.req.params;
-      if (!isValidObjectId(id)) return this.res.status(422).json({ message: 'Invalid mongo id' });
+      if (!isValidObjectId(id)) return this.res.status(422).json({ message: mongoMessage });
   
       const getCar = await this.service.getById(id);
-      if (!getCar) return this.res.status(404).json({ message: 'Car not found' });
+      if (!getCar) return this.res.status(404).json({ message: carMessage });
   
       return this.res.status(200).json(getCar);
     } catch (error) {
@@ -61,15 +64,31 @@ class CarController {
   public async update() {
     try {
       const { id } = this.req.params;
-      if (!isValidObjectId(id)) return this.res.status(422).json({ message: 'Invalid mongo id' });
+      if (!isValidObjectId(id)) return this.res.status(422).json({ message: mongoMessage });
       
       const getCar = await this.service.getById(id);
-      if (!getCar) return this.res.status(404).json({ message: 'Car not found' });
+      if (!getCar) return this.res.status(404).json({ message: carMessage });
       
       const car: ICar = this.req.body;
       const result = await this.service.updateCar(id, car);
       
       return this.res.status(200).json(result);
+    } catch (error) {
+      this.next(error);
+    }
+  }
+
+  public async delete() {
+    try {
+      const { id } = this.req.params;
+      if (!isValidObjectId(id)) return this.res.status(422).json({ message: mongoMessage });
+
+      const getCar = await this.service.getById(id);
+      if (!getCar) return this.res.status(404).json({ message: carMessage });
+
+      await this.service.deleteById(id);
+
+      return this.res.status(204).json();
     } catch (error) {
       this.next(error);
     }
