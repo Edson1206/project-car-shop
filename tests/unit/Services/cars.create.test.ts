@@ -6,7 +6,7 @@ import Car from '../../../src/Domains/Car';
 import CarService from '../../../src/Services/CarService';
 
 describe('Test the endpoint POST /cars', function () {
-  it('Is possible create a new car sucessifully', async function () {
+  it('Is possible create a new car successfully', async function () {
     // arrange
     const newCarInput: ICar = {
       model: 'Civic',
